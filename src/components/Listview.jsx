@@ -1,22 +1,15 @@
-// map calendar dates to render day cells (7-days starting from Monday)
-// find the first date with Monday as the day
-// slice the calendar array from that index to get the first 7 days
-// remove remaining dates by removing calendar array.length % 7 (remainder) from the end of the array
-
-// for each 7 days, render a day cell with the date and day of the week
-// by default, current week of today's date is rendered
-// if user switch to prev week, render calendar array[current date index - 7] to array[current date index - 1
-// if user switch to next week, render calendar array[current date index + 1] to array[current date index + 7]
-// check if current date index is the first or last index of the calendar array
-// if so, disable prev or next button
-
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { deleteHabit, toggleStatus } from "../features/habitSlice"
+import { IoIosAdd } from "react-icons/io"
+import { FaCheck } from "react-icons/fa6"
+import { toggleStatus } from "../features/habitSlice"
 import NewHabit from "./NewHabit"
+import HabitDetails from "./HabitDetails"
 
 export default function Listview() {
     const [modalShow, setModalShow] = useState(false)
+    const [detailShow, setDetailShow] = useState(false)
+    const [selectedHabit, setSelectedHabit] = useState(null)
 
     const dispatch = useDispatch()
     const { habits } = useSelector(state => state.habits)
@@ -26,48 +19,73 @@ export default function Listview() {
         dispatch(toggleStatus({title, date}))
     }
 
-    const deleteHabitHandler = (title) => {
-        dispatch(deleteHabit(title))
+    const showDetailModal = (habit) => {
+        setSelectedHabit(habit)
+        setDetailShow(true)
+    }
+
+    const hideDetailModal = () => {
+        setSelectedHabit(null)
+        setDetailShow(false)
     }
 
     return (
         <div className="listview">
-            <button onClick={() => setModalShow(true)}>New Habit</button>
-            <NewHabit show={modalShow} onHide={() => setModalShow(false)} />
             <table className="habit-table">
                 <thead>
                     <tr>
-                        <th>Habits</th>
+                        {/* Habits */}
+                        <th className="habit-list habit-list__header"></th>
                         {
                             dates.map((date, index) => {
-                                const month = new Date(date.date).getMonth() + 1
-                                const day = new Date(date.date).getDate()
-                                return <th key={index}>{date.day} {day}/{month}</th>
+                                // const month = new Date(date.date).getMonth() + 1
+                                // const day = new Date(date.date).getDate()
+                                return (
+                                    <th key={index} className="habit-dates__label">
+                                        {date.day} 
+                                        {/* <p >{day}/{month}</p> */}
+                                    </th>
+                                )
                             })
                         }
+                        <th className="habit-points habit-points__header">Points</th>
                     </tr>
                 </thead>
                 <tbody>
                     { 
                         habits.map((habit, habitIdx) => (
                             <tr key={habitIdx}>
-                                <td className="habit-title">
+                                <td onClick={() => showDetailModal(habit)} className="habit-list habit-list__title">
                                     {habit.title}
-                                    {habit.points}
-                                    <button className="habit-delete" onClick={() => deleteHabitHandler(habit.title)}>X</button>
                                 </td>
+
                                 {
                                     dates.map((date, dateIdx) => (
-                                        <td key={dateIdx} className="habit-cells" onClick={() => statusHandler(habit.title, date.date)}>
-                                            {habit.checkins.includes(date.date) ? "/" : ""}
+                                        <td key={dateIdx} className="habit-dates__cells" onClick={() => statusHandler(habit.title, date.date)}>
+                                            {habit.checkins.includes(date.date) && <FaCheck className="habit-checkin" />}
                                         </td>
                                     ))
                                 }
+
+                                <td className="habit-list__points">{habit.points}</td>
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
+            {
+                selectedHabit && 
+                <HabitDetails 
+                    show={detailShow} 
+                    onHide={hideDetailModal}
+                    habit={selectedHabit}
+                />
+            }
+            <button className="new-habit-ctrl" onClick={() => setModalShow(true)}>
+                <IoIosAdd className="ctrl-btn btn--add" />
+                New Habit
+            </button>
+            <NewHabit show={modalShow} onHide={() => setModalShow(false)} />
         </div>
     )
 }
