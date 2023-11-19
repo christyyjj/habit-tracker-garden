@@ -15,24 +15,11 @@ const getDaysApart = (prevDate, currentDate) => {
 }
 
 // Update Plant Stage
-const updatePlantStage = (habit, point) => {
+const updatePlantStage = (habit) => {
     const currentBasis = basis.find((b) => b.name === habit.plant.basis)
-    
-    // When unchecking a date within >= 3 dates, 2 marks is lost, then we need an update as well but this case is not covered by the remainder check
-    // how to cover this case?
+    habit.plant.stage = stages[Math.floor(habit.points / currentBasis.cycle)] ?? habit.plant.stage
 
-    // Case 1 - Unchecking
-    // can be 1 or 2 points removed at a time
-
-    // Case 2 - Checking
-    // can be 1 or 2 points added at a time
-    
-
-    if (habit.points >= currentBasis.cycle && habit.points % currentBasis.cycle === (point === 1 ? 1 : 0)) {
-        const currentStageIndex = stages.indexOf(habit.plant.stage)
-        const nextStage = stages[currentStageIndex + point]
-        habit.plant.stage = nextStage ? nextStage : habit.plant.stage
-    }
+    console.log(stages[Math.floor(habit.points / currentBasis.cycle)])
 }
 
 // Update Habit (Check for necessary point or stage updates)
@@ -58,13 +45,15 @@ const updateHabit = (habit, currentCheckin, point) => {
         const nextCheckin = habit.checkins[currentIndex + 1]
         const currentBasis = basis.find((b) => b.name === habit.plant.basis)
 
-        if (previousCheckin && getDaysApart(previousCheckin, currentCheckin) === currentBasis.daysApart) 
+        if (previousCheckin && getDaysApart(previousCheckin, currentCheckin) === currentBasis.daysApart) {
             habit.points += point
-
+        }
+            
         if (nextCheckin && getDaysApart(currentCheckin, nextCheckin) === currentBasis.daysApart)
             habit.points += point
 
-        updatePlantStage(habit, point)
+        updatePlantStage(habit)
+
     } else {
         habit.points += point
         habit.plant.stage = stages[0]
@@ -98,8 +87,17 @@ const habitSlice = createSlice({
     initialState,
     reducers: {
         addHabit: (state, { payload }) => {
-            state.habits.push(payload)
-            habits.push(payload)
+            console.log("Adding Habit Reducer")
+            const { title, description, basis } = payload
+            const newHabit = {
+                title,
+                description,
+                plant: { basis, stage: stages[0] },
+                points: 0,
+                checkins: []
+            }
+            state.habits = [...state.habits, newHabit]
+            habits = [...habits, newHabit]
             localStorage.setItem('habits', JSON.stringify(habits))
         },
         deleteHabit: (state, { payload }) => {
@@ -108,8 +106,6 @@ const habitSlice = createSlice({
             localStorage.setItem('habits', JSON.stringify(habits))
         },
         toggleStatus: (state, { payload }) => {
-            localStorage.clear()
-
             const { title, date } = payload
 
             state.habits.forEach((habit) => {

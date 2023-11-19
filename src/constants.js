@@ -1,4 +1,4 @@
-const dates = [
+const calendar = [
     { date: "1 Oct 2023", day: "Sun", status: 'none' },
     { date: "2 Oct 2023", day: "Mon", status: 'none' },
     { date: "3 Oct 2023", day: "Tue", status: 'none' },
@@ -93,6 +93,9 @@ const dates = [
     { date: "31 Dec 2023", day: "Sun", status: 'none' },
   ]
 
+const NEXTWEEK = "NEXTWEEK"
+const PREVWEEK = "PREVWEEK"
+
 // Habit Basis
 const DAILY = "Daily"
 const WEEKLY = "Weekly"
@@ -130,4 +133,4 @@ const stages = [ SEEDLING, VEGETATIVE, FLOWERING ]
 const LISTVIEW = "Habit List"
 const GARDEN = "Garden"
 
-export { dates, basis, stages, DAILY, WEEKLY, MONTHLY, LISTVIEW, GARDEN }
+export { calendar, basis, stages, NEXTWEEK, PREVWEEK, DAILY, WEEKLY, MONTHLY, LISTVIEW, GARDEN }

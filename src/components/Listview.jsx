@@ -3,19 +3,24 @@
 // slice the calendar array from that index to get the first 7 days
 // remove remaining dates by removing calendar array.length % 7 (remainder) from the end of the array
 
-import { useDispatch, useSelector } from "react-redux"
-import { dates } from "../constants"
-import { toggleStatus } from "../features/habitSlice"
-
 // for each 7 days, render a day cell with the date and day of the week
 // by default, current week of today's date is rendered
 // if user switch to prev week, render calendar array[current date index - 7] to array[current date index - 1
 // if user switch to next week, render calendar array[current date index + 1] to array[current date index + 7]
 // check if current date index is the first or last index of the calendar array
 // if so, disable prev or next button
+
+import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { toggleStatus } from "../features/habitSlice"
+import NewHabit from "./NewHabit"
+
 export default function Listview() {
+    const [modalShow, setModalShow] = useState(false)
+
     const dispatch = useDispatch()
     const { habits } = useSelector(state => state.habits)
+    const { dates } = useSelector(state => state.dates)
 
     const statusHandler = (title, date) => {
         dispatch(toggleStatus({title, date}))
@@ -23,7 +28,8 @@ export default function Listview() {
 
     return (
         <div className="listview">
-            <button>New Habit</button>
+            <button onClick={() => setModalShow(true)}>New Habit</button>
+            <NewHabit show={modalShow} onHide={() => setModalShow(false)} />
             <table className="habit-table">
                 <thead>
                     <tr>
