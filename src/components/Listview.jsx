@@ -12,7 +12,7 @@
 
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { toggleStatus } from "../features/habitSlice"
+import { deleteHabit, toggleStatus } from "../features/habitSlice"
 import NewHabit from "./NewHabit"
 
 export default function Listview() {
@@ -24,6 +24,10 @@ export default function Listview() {
 
     const statusHandler = (title, date) => {
         dispatch(toggleStatus({title, date}))
+    }
+
+    const deleteHabitHandler = (title) => {
+        dispatch(deleteHabit(title))
     }
 
     return (
@@ -50,6 +54,7 @@ export default function Listview() {
                                 <td className="habit-title">
                                     {habit.title}
                                     {habit.points}
+                                    <button className="habit-delete" onClick={() => deleteHabitHandler(habit.title)}>X</button>
                                 </td>
                                 {
                                     dates.map((date, dateIdx) => (

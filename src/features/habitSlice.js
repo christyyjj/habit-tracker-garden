@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { DAILY, basis, stages } from '../constants'
+import { DAILY, SEEDLING, growth, plant } from '../constants'
 
 // Date Parsing
 const parseDate = (dateString) => {
@@ -16,10 +16,10 @@ const getDaysApart = (prevDate, currentDate) => {
 
 // Update Plant Stage
 const updatePlantStage = (habit) => {
-    const currentBasis = basis.find((b) => b.name === habit.plant.basis)
-    habit.plant.stage = stages[Math.floor(habit.points / currentBasis.cycle)] ?? habit.plant.stage
-
-    console.log(stages[Math.floor(habit.points / currentBasis.cycle)])
+    const currentBasis = plant[habit.plant.basis]
+    const comingStage = Math.floor(habit.points / currentBasis.cycle)
+    habit.plant.stage = comingStage ?? habit.plant.stage
+    console.log("Updated plant stage: ", growth[habit.plant.stage].stage)
 }
 
 // Update Habit (Check for necessary point or stage updates)
@@ -31,11 +31,7 @@ const updateHabit = (habit, currentCheckin, point) => {
             const totalCheckins = habit.checkins.length
             const recentCheckin = habit.checkins[totalCheckins - 2]
 
-            console.log("Recent Checkin: ", recentCheckin)
-            console.log("Current Checkin: ", currentCheckin)
-
             if (currentCheckin < recentCheckin) {
-                console.log("Sorting")
                 habit.checkins.sort((a, b) => getDaysApart(a, b) > 0 ? -1 : 1)
             }
         }
@@ -43,7 +39,8 @@ const updateHabit = (habit, currentCheckin, point) => {
         const currentIndex = habit.checkins.indexOf(currentCheckin)
         const previousCheckin = habit.checkins[currentIndex - 1]
         const nextCheckin = habit.checkins[currentIndex + 1]
-        const currentBasis = basis.find((b) => b.name === habit.plant.basis)
+        const currentBasis = plant[habit.plant.basis]
+        console.log(currentBasis.daysApart)
 
         if (previousCheckin && getDaysApart(previousCheckin, currentCheckin) === currentBasis.daysApart) {
             habit.points += point
@@ -53,14 +50,10 @@ const updateHabit = (habit, currentCheckin, point) => {
             habit.points += point
 
         updatePlantStage(habit)
-
     } else {
         habit.points += point
-        habit.plant.stage = stages[0]
+        habit.plant.stage = SEEDLING
     }
-
-    console.log("After Updating Points: ", habit.points)
-    console.log("After Updating Stage: ", habit.plant.stage)
 }
 
 // Load habits from local storage
@@ -70,7 +63,7 @@ const data = localStorage.getItem('habits')
         { 
             title: "Drink 2L of water", 
             description: "Get hydrated", 
-            plant: { basis: DAILY, stage: stages[0] }, 
+            plant: { basis: DAILY, stage: SEEDLING }, 
             points: 0,
             checkins: []
         }
@@ -87,12 +80,11 @@ const habitSlice = createSlice({
     initialState,
     reducers: {
         addHabit: (state, { payload }) => {
-            console.log("Adding Habit Reducer")
             const { title, description, basis } = payload
             const newHabit = {
                 title,
                 description,
-                plant: { basis, stage: stages[0] },
+                plant: { basis, stage: SEEDLING },
                 points: 0,
                 checkins: []
             }
@@ -102,7 +94,7 @@ const habitSlice = createSlice({
         },
         deleteHabit: (state, { payload }) => {
             state.habits = state.habits.filter(habit => habit.title !== payload)
-            habits = habits.filter(habit => habit.id !== payload)
+            habits = habits.filter(habit => habit.title !== payload)
             localStorage.setItem('habits', JSON.stringify(habits))
         },
         toggleStatus: (state, { payload }) => {
@@ -112,19 +104,10 @@ const habitSlice = createSlice({
                 if (habit.title === title) {
 
                     if (habit.checkins.includes(date)) {
-                        
                         updateHabit(habit, date, -1)
-
                         habit.checkins = habit.checkins.filter((checkin) => checkin !== date)
-
-                        console.log("After Uncheck length: ", habit.checkins.length)
                     } else {
-                        console.log("New Checkin")
-
                         habit.checkins = [...habit.checkins, date]
-
-                        console.log("New checkins length: ", habit.checkins.length)
-
                         updateHabit(habit, date, 1)
                     }
                 }

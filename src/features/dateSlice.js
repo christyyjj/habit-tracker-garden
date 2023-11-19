@@ -1,5 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { NEXTWEEK, calendar } from "../constants"
+import { NEXTWEEK, PREVWEEK, calendar } from "../constants"
+
+const getPrevWeek = (date) => {
+    const dateIndex = calendar.findIndex(d => d.date === date)
+    const prevWeek = calendar.slice(dateIndex - 7, dateIndex)
+    return prevWeek
+}
+
+const getNextWeek = (date) => {
+    const dateIndex = calendar.findIndex(d => d.date === date)
+    const nextWeek = calendar.slice(dateIndex + 1, dateIndex + 8)
+    return nextWeek
+}
 
 const firstMonday = calendar.findIndex((d) => d.day === "Mon")
 
@@ -12,19 +24,20 @@ const dateSlice = createSlice({
     initialState,
     reducers: {
         setDateRange: (state, action) => {
-            if (action.payload === NEXTWEEK) {
-                const lastDateIndex = calendar.findIndex(d => d.date === state.dates[state.dates.length - 1].date);
-                const nextWeek = calendar.slice(lastDateIndex + 1, lastDateIndex + 8);
-                state.dates = nextWeek;
-            } else {
-                const firstDateIndex = calendar.findIndex(d => d.date === state.dates[0].date);
-                const prevWeek = calendar.slice(firstDateIndex - 7, firstDateIndex);
-                state.dates = prevWeek;
+            switch (action.payload) {
+                case NEXTWEEK:
+                    state.dates = getNextWeek(state.dates[state.dates.length - 1].date)
+                    break
+                case PREVWEEK:
+                    state.dates = getPrevWeek(state.dates[0].date)
+                    break
             }
         },
     }
 })
 
 export const { setDateRange } = dateSlice.actions
+
+export { getNextWeek, getPrevWeek }
 
 export default dateSlice.reducer

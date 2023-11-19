@@ -97,40 +97,61 @@ const NEXTWEEK = "NEXTWEEK"
 const PREVWEEK = "PREVWEEK"
 
 // Habit Basis
-const DAILY = "Daily"
-const WEEKLY = "Weekly"
-const MONTHLY = "Monthly"
+const DAILY = 0
+const WEEKLY = 1
+const MONTHLY = 2
 
-const basis = [
+const plant = [
     { 
-        name: DAILY,
-        url: "" ,
+        basis: "Daily",
+        icon: "🌻" ,
         daysApart: 1,
         cycle: 7
     },
     { 
-        name: WEEKLY,
-        url: "" ,
+        basis: "Weekly",
+        icon: "🌼" ,
         daysApart: 7,
         cycle: 4
     },
     { 
-        name: MONTHLY,
-        url: "",
+        basis: "Monthly",
+        icon: "🌷",
         daysApart: 30,
         cycle: 2
     }
 ]
 
 // Plant Growth Stages
-const SEEDLING = "Seedling"
-const VEGETATIVE = "Vegetative"
-const FLOWERING = "Flowering"
+const SEEDLING = 0
+const VEGETATIVE = 1
+const FLOWERING = 2
 
-const stages = [ SEEDLING, VEGETATIVE, FLOWERING ]
+const growth = [ 
+    {
+        stage: "Seedling",
+        emoji: "🌱"
+    }, 
+    {
+        stage: "Vegetative",
+        emoji: "🌿"
+    }, 
+    {
+        stage: "Flowering",
+        emoji: plant.map(p => p.icon)
+    } 
+]
 
 // Habit View
 const LISTVIEW = "Habit List"
 const GARDEN = "Garden"
 
-export { calendar, basis, stages, NEXTWEEK, PREVWEEK, DAILY, WEEKLY, MONTHLY, LISTVIEW, GARDEN }
+export { 
+    calendar, 
+    plant, 
+    growth, 
+    SEEDLING, VEGETATIVE, FLOWERING, 
+    NEXTWEEK, PREVWEEK, 
+    DAILY, WEEKLY, MONTHLY, 
+    LISTVIEW, GARDEN 
+}

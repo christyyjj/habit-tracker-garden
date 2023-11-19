@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { DAILY, MONTHLY, WEEKLY } from "../constants"
+import { plant, DAILY, MONTHLY, WEEKLY } from "../constants"
 import { addHabit } from "../features/habitSlice"
 import { Modal } from "react-bootstrap"
 import ModalDialog from "react-bootstrap/ModalDialog"
@@ -21,7 +21,6 @@ export default function NewHabit({ show, onHide }) {
     // handle new habits
     const AddHabitHandler = (e) => {
         e.preventDefault()
-        console.log("Add Habit Handler")
         dispatch(addHabit({ title, description, basis }))
         onHide()
     }
@@ -67,9 +66,9 @@ export default function NewHabit({ show, onHide }) {
                                 onChange={(e) => setBasis(e.target.value)}
                                 required={true}
                             >
-                                <option value={DAILY}>{DAILY}</option>
-                                <option value={WEEKLY}>{WEEKLY}</option>
-                                <option value={MONTHLY}>{MONTHLY}</option>
+                                <option value={DAILY}>{plant[DAILY].basis}</option>
+                                <option value={WEEKLY}>{plant[WEEKLY].basis}</option>
+                                <option value={MONTHLY}>{plant[MONTHLY].basis}</option>
                             </FormControl> 
                         </FormGroup>
 
