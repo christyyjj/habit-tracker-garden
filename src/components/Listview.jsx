@@ -39,11 +39,11 @@ export default function Listview() {
                         {
                             dates.map((date, index) => {
                                 // const month = new Date(date.date).getMonth() + 1
-                                // const day = new Date(date.date).getDate()
+                                const day = new Date(date.date).getDate()
                                 return (
                                     <th key={index} className="habit-dates__label">
+                                        <p className="habit-dates__label--day">{day}</p>
                                         {date.day} 
-                                        {/* <p >{day}/{month}</p> */}
                                     </th>
                                 )
                             })

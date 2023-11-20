@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { DAILY, SEEDLING, growth, plant } from '../constants'
+import checkin from '../assets/sounds/check-mark.mp3'
+import newstage from '../assets/sounds/stage-unlock.mp3'
 
 // Date Parsing
 const parseDate = (dateString) => {
@@ -18,8 +20,13 @@ const getDaysApart = (prevDate, currentDate) => {
 const updatePlantStage = (habit) => {
     const currentBasis = plant[habit.plant.basis]
     const comingStage = Math.floor(habit.points / currentBasis.cycle)
-    habit.plant.stage = comingStage ?? habit.plant.stage
-    console.log("Updated plant stage: ", growth[habit.plant.stage].stage)
+
+    if (comingStage !== habit.plant.stage && growth[comingStage].stage !== null) {
+        if (comingStage > habit.plant.stage) {
+            new Audio(newstage).play()
+        }
+        habit.plant.stage = comingStage
+    }
 }
 
 // Update Habit (Check for necessary point or stage updates)
@@ -40,7 +47,6 @@ const updateHabit = (habit, currentCheckin, point) => {
         const previousCheckin = habit.checkins[currentIndex - 1]
         const nextCheckin = habit.checkins[currentIndex + 1]
         const currentBasis = plant[habit.plant.basis]
-        console.log(currentBasis.daysApart)
 
         if (previousCheckin && getDaysApart(previousCheckin, currentCheckin) === currentBasis.daysApart) {
             habit.points += point
@@ -48,6 +54,8 @@ const updateHabit = (habit, currentCheckin, point) => {
             
         if (nextCheckin && getDaysApart(currentCheckin, nextCheckin) === currentBasis.daysApart)
             habit.points += point
+
+        console.log("Updated Points: ", habit.points)
 
         updatePlantStage(habit)
     } else {
@@ -107,6 +115,7 @@ const habitSlice = createSlice({
                         updateHabit(habit, date, -1)
                         habit.checkins = habit.checkins.filter((checkin) => checkin !== date)
                     } else {
+                        new Audio(checkin).play()
                         habit.checkins = [...habit.checkins, date]
                         updateHabit(habit, date, 1)
                     }
