@@ -2,6 +2,8 @@
 A react-vite project working with Vanilla CSS <br>
 Reimagine habit tracking by integrating it with a engaging virtual garden
 
+[Project Demo](melodious-stardust-b25500.netlify.app/) 
+
 🌻 Daily Habit <br>
 🌼 Weekly Habit <br>
 🌷 Monthly Habit <br>
