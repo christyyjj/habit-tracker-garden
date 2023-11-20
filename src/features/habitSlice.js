@@ -21,7 +21,7 @@ const updatePlantStage = (habit) => {
     const currentBasis = plant[habit.plant.basis]
     const comingStage = Math.floor(habit.points / currentBasis.cycle)
 
-    if (comingStage !== habit.plant.stage && growth[comingStage].stage !== null) {
+    if (comingStage !== habit.plant.stage && growth[comingStage] !== undefined) {
         if (comingStage > habit.plant.stage) {
             new Audio(newstage).play()
         }
