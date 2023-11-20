@@ -1,10 +1,15 @@
 import { Col, FormControl, FormGroup, FormLabel, Modal, Row } from "react-bootstrap"
-import { growth, plant } from "../constants"
+import { FLOWERING, growth, plant } from "../constants"
 import { useDispatch } from "react-redux"
 import { deleteHabit } from "../features/habitSlice"
 
 
 export default function HabitDetails({ show, onHide, habit }) {
+    const currentStage = growth[habit.plant.stage].stage
+    const currentPlant = habit.plant.stage === FLOWERING 
+        ? growth[habit.plant.stage].emoji[habit.plant.basis] 
+        : growth[habit.plant.stage].emoji
+
     const dispatch = useDispatch()
     const deleteHabitHandler = (title) => {
         dispatch(deleteHabit(title))
@@ -45,7 +50,7 @@ export default function HabitDetails({ show, onHide, habit }) {
                         <FormControl
                             type="text"
                             readOnly={true}
-                            value={`${growth[habit.plant.stage].emoji}  ${growth[habit.plant.stage].stage}`}
+                            value={`${currentPlant}  ${currentStage}`}
                             >
                         </FormControl>
                     </Col>
