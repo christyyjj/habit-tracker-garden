@@ -1,8 +1,11 @@
-# React + Vite
+# Habit Tracker Garden
+A react-vite project working with Vanilla CSS, reimagine habit tracking by integrating it with a engaging virtual garden.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🌻 Daily Habit
+🌼 Weekly Habit
+🌷 Monthly Habit
 
-Currently, two official plugins are available:
+Build new habits and persist your effort to nourish your habit plants.
+Immersive habit tracking experience with the joy of cultivating a virtual garden.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Habits built are stored in the browser local storage.
