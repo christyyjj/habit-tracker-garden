@@ -11,4 +11,5 @@ Reimagine habit tracking by integrating it with an engaging virtual garden
 Build new habits and persist your effort to nourish your habit plants <br>
 Immersive habit tracking experience with the joy of cultivating a virtual garden
 
-Habits built are stored in the browser local storage for simple demo
+Habits built are stored in the browser local storage and calendar dates are hard coded for simple demo purpose
+Working on to integrate with real-time calendar dates in the future
