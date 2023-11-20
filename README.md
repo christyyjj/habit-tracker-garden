@@ -1,6 +1,6 @@
 # Habit Tracker Garden
 A react-vite project working with Vanilla CSS <br>
-Reimagine habit tracking by integrating it with a engaging virtual garden
+Reimagine habit tracking by integrating it with an engaging virtual garden
 
 [Project Demo](melodious-stardust-b25500.netlify.app/) 
 
