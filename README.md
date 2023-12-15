@@ -2,7 +2,7 @@
 A react-vite project working with Vanilla CSS <br>
 Reimagine habit tracking by integrating it with an engaging virtual garden
 
-[Project Demo](https://habitblooms.netlify.app/) 
+[Project Demo](https://christyyjj.github.io/habit-tracker-garden/) 
 
 🌻 Daily Habit <br>
 🌼 Weekly Habit <br>
